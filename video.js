@@ -171,9 +171,8 @@ VideoJS.player = VideoJS.prototype;
 ================================================================================ */
 VideoJS.player.extend({
   flashSupported: function(){
-    if (!this.flashElement) { this.flashElement = this.getFlashElement(); }
     // Check if object exists & Flash Player version is supported
-    if (this.flashElement && this.flashPlayerVersionSupported()) {
+    if (this.flashPlayerVersionSupported()) {
       return true;
     } else {
       return false;
@@ -198,11 +197,16 @@ VideoJS.player.extend({
   },
   // Used to force a browser to fall back when it's an HTML5 browser but there's no supported sources
   replaceWithFlash: function(){
+    alert('replacing flash')
     // this.flashElement = this.video.removeChild(this.flashElement);
-    if (this.flashElement) {
-      this.box.insertBefore(this.flashElement, this.video);
-      this.video.style.display = "none"; // Removing it was breaking later players
-    }
+    jwplayer("container").setup({
+        provider: "http",
+        'bgcolor' : '#014252',
+        "http.startparam":"start",
+        players: [
+            { type: "flash", src: "/flashplayer/player.swf" }
+        ]
+    });
   },
   // Check if browser can use this flash player
   flashPlayerVersionSupported: function(){
